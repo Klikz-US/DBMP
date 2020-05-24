@@ -2,9 +2,9 @@
     "uid": "server",
     "append": false,
     "watch": true,
-    "script": "./index.js",
+    "script": "/home/klikz/public_html/kandykoi.com/server/index.js",
     "sourceDir": "",
-    "logFile": "./log/log.log",
-    "outFile": "./log/out.log",
-    "errFile": "./log/err.log"
+    "logFile": "/home/klikz/public_html/kandykoi.com/server/log/log.log",
+    "outFile": "/home/klikz/public_html/kandykoi.com/server/log/out.log",
+    "errFile": "/home/klikz/public_html/kandykoi.com/server/log/err.log"
 }
