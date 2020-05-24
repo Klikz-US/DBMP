@@ -1,7 +1,7 @@
 ---
 deployment:
     tasks:
-        - export SERVERPATH=/home/klikz/public_html/kandykoi.com/server
+        - export SERVERPATH=/home/klikz/public_html/kandykoi.com/server/
         - export FRONTPATH=/home/klikz/public_html/kandykoi.com
         - /bin/cp -R build/* $FRONTPATH
         - /bin/cp -R server $SERVERPATH
