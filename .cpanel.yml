@@ -1,14 +1,9 @@
 ---
 deployment:
     tasks:
-        - forever stopall
         - export OLDSERVERPATH=/home/klikz/public_html/kandykoi.com/server/
         - export SERVERPATH=/home/klikz/public_html/kandykoi.com/
         - export FOREVERPATH=/home/klikz/public_html/kandykoi.com/server/service.json
-        - /bin/rm -R $OLDSERVERPATH
-        - /bin/cp -R server $SERVERPATH
-        - forever start $FOREVERPATH
-
         - export BUILDSTATIC=/home/klikz/public_html/kandykoi.com/static
         - export BUILDFILES1=/home/klikz/public_html/kandykoi.com/*.json
         - export BUILDFILES2=/home/klikz/public_html/kandykoi.com/*.js
@@ -16,6 +11,9 @@ deployment:
         - export BUILDFILES4=/home/klikz/public_html/kandykoi.com/*.html
         - export BUILDFILES5=/home/klikz/public_html/kandykoi.com/*.ico
         - export BUILDFILES6=/home/klikz/public_html/kandykoi.com/*.txt
+
         - /bin/rm -R $BUILDSTATIC
         - /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
+        - /bin/rm -R $OLDSERVERPATH
+        - /bin/cp -R server $SERVERPATH
         - /bin/cp -R build/* $SERVERPATH
