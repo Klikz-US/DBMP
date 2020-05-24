@@ -4,7 +4,7 @@
     "watch": true,
     "script": "./index.js",
     "sourceDir": "",
-    "logFile": "/home/klikz/public_html/portal.klikz.us/server/log/log.log",
-    "outFile": "/home/klikz/public_html/portal.klikz.us/server/log/out.log",
-    "errFile": "/home/klikz/public_html/portal.klikz.us/server/log/err.log"
+    "logFile": "/home/klikz/logs/portal.klikz.us/log.log",
+    "outFile": "/home/klikz/logs/portal.klikz.us/out.log",
+    "errFile": "/home/klikz/logs/portal.klikz.us/err.log"
 }

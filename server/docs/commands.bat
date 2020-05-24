@@ -28,3 +28,8 @@ mongodb://stl:stl@localhost:27017/savethislife?retryWrites=true&w=majoritys
 
 REM Connect from Compass
 mongodb://stl:stl@34.125.11.121:27017/?authSource=savethislife&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false
+
+REM paths
+cd /home/klikz/repositories/DBMP/
+cd /home/klikz/public_html/portal.klikz.us/server/
+forever start service.json
