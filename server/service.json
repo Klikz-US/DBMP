@@ -1,6 +1,6 @@
 {
     "uid": "server",
-    "append": false,
+    "append": true,
     "watch": true,
     "script": "./index.js",
     "sourceDir": "",
