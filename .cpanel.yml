@@ -11,8 +11,8 @@ deployment:
         - export BUILDFILES4=/home/klikz/public_html/kandykoi.com/*.html
         - export BUILDFILES5=/home/klikz/public_html/kandykoi.com/*.ico
         - export BUILDFILES6=/home/klikz/public_html/kandykoi.com/*.txt
-        - /bin/rm -R $BUILDSTATIC
-        - /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
-        - /bin/rm -R $OLDSERVERPATH
-        - /bin/cp -R server $SERVERPATH
-        - /bin/cp -R build/* $SERVERPATH
+        - sudo /bin/rm -R $BUILDSTATIC
+        - sudo /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
+        - sudo /bin/rm -R $OLDSERVERPATH
+        - sudo /bin/cp -R server $SERVERPATH
+        - sudo /bin/cp -R build/* $SERVERPATH
