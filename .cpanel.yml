@@ -1,5 +1,5 @@
 ---
 deployment:
     tasks:
-        - export SERVERPATH=/home/klikz/public_html/kandykoi.com/server/
+        - export SERVERPATH=/home/klikz/public_html/kandykoi.com/
         - /bin/cp -R server $SERVERPATH
