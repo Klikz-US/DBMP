@@ -1,18 +1,19 @@
 ---
 deployment:
     tasks:
-        - export OLDSERVERPATH=/home/klikz/public_html/portal.klikz.us/server/
-        - export SERVERPATH=/home/klikz/public_html/portal.klikz.us/
-        - export FOREVERPATH=/home/klikz/public_html/portal.klikz.us/server/service.json
-        - export BUILDSTATIC=/home/klikz/public_html/portal.klikz.us/static
-        - export BUILDFILES1=/home/klikz/public_html/portal.klikz.us/*.json
-        - export BUILDFILES2=/home/klikz/public_html/portal.klikz.us/*.js
-        - export BUILDFILES3=/home/klikz/public_html/portal.klikz.us/*.png
-        - export BUILDFILES4=/home/klikz/public_html/portal.klikz.us/*.html
-        - export BUILDFILES5=/home/klikz/public_html/portal.klikz.us/*.ico
-        - export BUILDFILES6=/home/klikz/public_html/portal.klikz.us/*.txt
+        - export OLDSERVERPATH=/home/klikz/public_html/klikz.us/server/
+        - export SERVERPATH=/home/klikz/public_html/klikz.us/
+        - export BUILDSTATIC=/home/klikz/public_html/klikz.us/static
+        - export BUILDFILES1=/home/klikz/public_html/klikz.us/*.json
+        - export BUILDFILES2=/home/klikz/public_html/klikz.us/*.js
+        - export BUILDFILES3=/home/klikz/public_html/klikz.us/*.png
+        - export BUILDFILES4=/home/klikz/public_html/klikz.us/*.html
+        - export BUILDFILES5=/home/klikz/public_html/klikz.us/*.ico
+        - export BUILDFILES6=/home/klikz/public_html/klikz.us/*.txt
         - sudo /bin/rm -R $BUILDSTATIC
         - sudo /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
         - sudo /bin/rm -R $OLDSERVERPATH
         - sudo /bin/cp -R server $SERVERPATH
         - sudo /bin/cp -R build/* $SERVERPATH
+        - sudo /bin/cp package-lock.json $SERVERPATH
+        - sudo /bin/cp package.json $SERVERPATH
