@@ -17,3 +17,4 @@ deployment:
         - sudo /bin/cp -R build/* $SERVERPATH
         - sudo /bin/cp package-lock.json $SERVERPATH
         - sudo /bin/cp package.json $SERVERPATH
+        - sudo /bin/cp .htaccess $SERVERPATH

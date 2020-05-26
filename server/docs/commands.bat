@@ -31,5 +31,12 @@ mongodb://stl:stl@34.125.11.121:27017/?authSource=savethislife&readPreference=pr
 
 REM paths
 cd /home/klikz/repositories/DBMP/
-cd /home/klikz/public_html/portal.klikz.us/server/
+cd /home/klikz/public_html/klikz.us/server/
 forever start service.json
+
+REM change document root path
+cd /var/cpanel/userdata/USERNAME/DOMAIN.COM
+rm -vf domain.com.cache domain.com_SSl.cache
+/scripts/updateuserdatacache
+/scripts/rebuildhttpdconf
+service httpd restart
