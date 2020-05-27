@@ -22,7 +22,7 @@ exports.routesConfig = function (app) {
         Authentication.authMiddleware,
         Controller.deleteById,
     ]);
-    app.post("/admin/owners/register", [
+    app.post("/admin/owners/add", [
         Authentication.authMiddleware,
         Controller.register,
     ]);
