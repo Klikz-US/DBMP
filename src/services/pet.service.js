@@ -2,7 +2,9 @@ import axios from "axios";
 
 export const petGetListService = async (activePage) => {
     try {
-        return await axios.get(`${window.$server_url}/pets/page/${activePage}`);
+        return await axios.get(
+            `${window.$server_url}/admin/pets/page/${activePage}`
+        );
     } catch (err) {
         return {
             error: true,
@@ -13,7 +15,7 @@ export const petGetListService = async (activePage) => {
 
 export const petGetCountService = async () => {
     try {
-        return await axios.get(`${window.$server_url}/pets/count`);
+        return await axios.get(`${window.$server_url}/admin/pets/count`);
     } catch (err) {
         return {
             error: true,
@@ -24,7 +26,7 @@ export const petGetCountService = async () => {
 
 export const petGetService = async (_id) => {
     try {
-        return await axios.get(`${window.$server_url}/pets/${_id}`);
+        return await axios.get(`${window.$server_url}/admin/pets/${_id}`);
     } catch (err) {
         return {
             error: true,
@@ -35,7 +37,7 @@ export const petGetService = async (_id) => {
 
 export const petRegisterService = async (pet) => {
     try {
-        return await axios.post(`${window.$server_url}/pets/add`, pet);
+        return await axios.post(`${window.$server_url}/admin/pets/add`, pet);
     } catch (err) {
         return {
             error: true,
@@ -47,7 +49,7 @@ export const petRegisterService = async (pet) => {
 export const petDeleteService = async (microchip) => {
     try {
         return await axios.delete(
-            `${window.$server_url}/pets/delete/${microchip}`
+            `${window.$server_url}/admin/pets/delete/${microchip}`
         );
     } catch (err) {
         return {
@@ -60,7 +62,7 @@ export const petDeleteService = async (microchip) => {
 export const petUpdateService = async (id, pet) => {
     try {
         return await axios.patch(
-            `${window.$server_url}/pets/update/${id}`,
+            `${window.$server_url}/admin/pets/update/${id}`,
             pet
         );
     } catch (err) {

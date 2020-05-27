@@ -35,11 +35,11 @@ const upload = multer({
 });
 
 exports.routesConfig = function (app) {
-    app.get("/photos/:microchip", [
+    app.get("/admin/photos/:microchip", [
         Authentication.authMiddleware,
         Controller.getByMicrochip,
     ]);
-    app.post("/photos/add", [
+    app.post("/admin/photos/add", [
         Authentication.authMiddleware,
         upload.single("petPhotoData"),
         Controller.add,

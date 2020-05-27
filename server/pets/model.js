@@ -37,7 +37,7 @@ let PetModel = new Schema(
         },
         petBirth: {
             type: String,
-            default: "01/01/2001",
+            default: new Date(),
             trim: true,
         },
         specialNeeds: {

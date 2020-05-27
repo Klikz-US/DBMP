@@ -69,7 +69,11 @@ export default class UpdateOwner extends Component {
 
     componentDidMount() {
         axios
-            .get(window.$server_url + "/owners/" + this.props.match.params.id)
+            .get(
+                window.$server_url +
+                    "/admin/owners/" +
+                    this.props.match.params.id
+            )
             .then((res) => {
                 this.setState({
                     values: res.data,
@@ -84,11 +88,13 @@ export default class UpdateOwner extends Component {
         // Update Owner
         axios
             .patch(
-                window.$server_url + "/owners/edit/" + this.state.values._id,
+                window.$server_url +
+                    "/admin/owners/edit/" +
+                    this.state.values._id,
                 values
             )
             .then((res) => {
-                this.props.history.push("/owners");
+                this.props.history.push("/admin/owners");
             })
             .catch((err) => {
                 console.log(err);

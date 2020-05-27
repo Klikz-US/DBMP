@@ -2,26 +2,34 @@ const Controller = require("./controller");
 const Authentication = require("../services/auth");
 
 exports.routesConfig = function (app) {
-    app.get("/pets/count", [Authentication.authMiddleware, Controller.count]);
-    app.get("/pets/page/:pageId", [
+    app.get("/admin/pets/count", [
+        Authentication.authMiddleware,
+        Controller.count,
+    ]);
+    app.get("/admin/pets/page/:pageId", [
         Authentication.authMiddleware,
         Controller.getByPage,
     ]);
-    app.get("/pets/:_id", [Authentication.authMiddleware, Controller.getById]);
-    app.patch("/pets/edit/:_id", [
+    app.get("/admin/pets/:_id", [
+        Authentication.authMiddleware,
+        Controller.getById,
+    ]);
+    app.patch("/admin/pets/edit/:_id", [
         Authentication.authMiddleware,
         Controller.editById,
     ]);
-    app.delete("/pets/delete/:_id", [
+    app.delete("/admin/pets/delete/:_id", [
         Authentication.authMiddleware,
         Controller.deleteById,
     ]);
-    app.post("/pets/register", [
+    app.post("/admin/pets/register", [
         Authentication.authMiddleware,
         Controller.register,
     ]);
-    app.post("/pets/search", [
+    app.post("/admin/pets/search", [
         Authentication.authMiddleware,
         Controller.search,
     ]);
+
+    // API for External Platforms
 };

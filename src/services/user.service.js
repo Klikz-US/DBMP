@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const userGetListService = async () => {
     try {
-        return await axios.get(`${window.$server_url}/users`);
+        return await axios.get(`${window.$server_url}/admin/users`);
     } catch (err) {
         return {
             error: true,
@@ -13,7 +13,7 @@ export const userGetListService = async () => {
 
 export const userGetService = async (_id) => {
     try {
-        return await axios.get(`${window.$server_url}/users/${_id}`);
+        return await axios.get(`${window.$server_url}/admin/users/${_id}`);
     } catch (err) {
         return {
             error: true,
@@ -24,7 +24,7 @@ export const userGetService = async (_id) => {
 
 export const userRegisterService = async (user) => {
     try {
-        return await axios.post(`${window.$server_url}/users/add`, user);
+        return await axios.post(`${window.$server_url}/admin/users/add`, user);
     } catch (err) {
         return {
             error: true,
@@ -35,7 +35,9 @@ export const userRegisterService = async (user) => {
 
 export const userDeleteService = async (_id) => {
     try {
-        return await axios.delete(`${window.$server_url}/users/delete/${_id}`);
+        return await axios.delete(
+            `${window.$server_url}/admin/users/delete/${_id}`
+        );
     } catch (err) {
         return {
             error: true,
@@ -47,7 +49,7 @@ export const userDeleteService = async (_id) => {
 export const userUpdateService = async (id, user) => {
     try {
         return await axios.patch(
-            `${window.$server_url}/users/edit/${id}`,
+            `${window.$server_url}/admin/users/edit/${id}`,
             user
         );
     } catch (err) {

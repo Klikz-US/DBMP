@@ -52,9 +52,9 @@ export default class RegisterOwner extends Component {
     onClickSubmit(values) {
         // Register Owner
         axios
-            .post(window.$server_url + "/owners/register", values)
+            .post(window.$server_url + "/admin/owners/register", values)
             .then((res) => {
-                this.props.history.push("/owners");
+                this.props.history.push("/admin/owners");
             })
             .catch((err) => {
                 this.setState({
@@ -65,7 +65,7 @@ export default class RegisterOwner extends Component {
 
     onClickCancel(e) {
         e.preventDefault();
-        this.props.history.push("/owners");
+        this.props.history.push("/admin/owners");
     }
 
     listAllCountryOptions() {

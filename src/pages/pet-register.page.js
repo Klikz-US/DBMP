@@ -86,7 +86,7 @@ export default class RegisterPet extends Component {
 
         // Register Pet
         axios
-            .post(window.$server_url + "/pets/register", {
+            .post(window.$server_url + "/admin/pets/register", {
                 ...values,
                 ...{ photoPath: photoPath },
             })
@@ -107,7 +107,10 @@ export default class RegisterPet extends Component {
                     photoData.append("petPhotoData", this.state.petPhoto);
 
                     axios
-                        .post(window.$server_url + "/photos/add", photoData)
+                        .post(
+                            window.$server_url + "/admin/photos/add",
+                            photoData
+                        )
                         .then((res) => {
                             this.props.history.push("/pets");
                         })

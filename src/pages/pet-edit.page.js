@@ -89,7 +89,9 @@ export default class RegisterPet extends Component {
 
     componentDidMount() {
         axios
-            .get(window.$server_url + "/pets/" + this.props.match.params.id)
+            .get(
+                window.$server_url + "/admin/pets/" + this.props.match.params.id
+            )
             .then((res) => {
                 let petValues = res.data;
 
@@ -116,7 +118,11 @@ export default class RegisterPet extends Component {
                 });
 
                 axios
-                    .get(window.$server_url + "/photos/" + petValues.microchip)
+                    .get(
+                        window.$server_url +
+                            "/admin/photos/" +
+                            petValues.microchip
+                    )
                     .then((res) => {
                         this.setState({
                             petPhotoPreview:
@@ -152,7 +158,9 @@ export default class RegisterPet extends Component {
         // Update Pet
         axios
             .patch(
-                window.$server_url + "/pets/edit/" + this.props.match.params.id,
+                window.$server_url +
+                    "/admin/pets/edit/" +
+                    this.props.match.params.id,
                 {
                     ...values,
                     ...{ photoPath: photoPath },
@@ -175,7 +183,10 @@ export default class RegisterPet extends Component {
                     photoData.append("petPhotoData", this.state.petPhoto);
 
                     axios
-                        .post(window.$server_url + "/photos/add", photoData)
+                        .post(
+                            window.$server_url + "/admin/photos/add",
+                            photoData
+                        )
                         .then((res) => {
                             this.props.history.push("/pets");
                         })

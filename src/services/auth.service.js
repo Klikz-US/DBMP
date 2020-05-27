@@ -13,7 +13,7 @@ export const setAuthToken = (token) => {
 // verify refresh token to generate new access token if refresh token is present
 export const verifyTokenService = async () => {
     try {
-        return await axios.post(`${window.$server_url}/verifyToken`);
+        return await axios.post(`${window.$server_url}/admin/verifyToken`);
     } catch (err) {
         return {
             error: true,
@@ -25,7 +25,7 @@ export const verifyTokenService = async () => {
 // user login API to validate the credential
 export const userLoginService = async (email, password) => {
     try {
-        return await axios.post(`${window.$server_url}/login`, {
+        return await axios.post(`${window.$server_url}/admin/login`, {
             email,
             password,
         });
@@ -40,7 +40,7 @@ export const userLoginService = async (email, password) => {
 // manage user logout
 export const userLogoutService = async () => {
     try {
-        return await axios.post(`${window.$server_url}/logout`);
+        return await axios.post(`${window.$server_url}/admin/logout`);
     } catch (err) {
         return {
             error: true,
