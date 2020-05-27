@@ -14,7 +14,7 @@ exports.routesConfig = function (app) {
         Authentication.authMiddleware,
         Controller.getById,
     ]);
-    app.patch("/admin/owners/edit/:_id", [
+    app.patch("/admin/owners/update/:_id", [
         Authentication.authMiddleware,
         Controller.editById,
     ]);
