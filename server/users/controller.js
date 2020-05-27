@@ -161,7 +161,6 @@ exports.getById = (req, res) => {
 };
 
 exports.editById = (req, res) => {
-    console.log(req.body);
     const _id = req.params._id;
     const data = req.body;
 

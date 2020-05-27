@@ -107,9 +107,6 @@ exports.search = (req, res) => {
     const searchCategory = req.body.field;
     const searchValue = req.body.value;
 
-    console.log(searchCategory);
-    console.log(searchValue);
-
     async function fetchRelatedData() {
         let owners = [];
         switch (searchCategory) {
@@ -169,8 +166,6 @@ exports.search = (req, res) => {
             default:
                 return res.status(404).send("Invalid Search Category");
         }
-
-        console.log(owners);
 
         if (owners.length === 0) {
             res.status(404).send("no result");

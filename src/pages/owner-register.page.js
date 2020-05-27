@@ -28,6 +28,9 @@ export default function OwnerRegister() {
     }, [expiredAt, token, dispatch]);
     /* ----------------------- */
 
+    const history = useHistory();
+    const [formError, setFormError] = useState("");
+
     const name = useFormInput("");
     const email = useFormInput("");
     const phone1 = useFormInput("");
@@ -45,9 +48,6 @@ export default function OwnerRegister() {
     const country = useFormInput("");
     const seccon = useFormInput("");
     const spenote = useFormInput("");
-
-    const history = useHistory();
-    const [formError, setFormError] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();

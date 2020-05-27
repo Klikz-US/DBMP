@@ -1,112 +1,133 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import { Formik } from "formik";
-import "@availity/yup";
-import * as yup from "yup";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
 import csc from "country-state-city";
-import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 
-const CountryOptions = (props) => (
-    <option value={props.sortname}>{props.name}</option>
-);
+import {
+    verifyTokenAsync,
+    userLogoutAsync,
+} from "../actions/auth-async.action";
+import { setAuthToken } from "../services/auth.service";
+import { useFormInput } from "../utils/form-input.util";
+import { ownerGetService, ownerUpdateService } from "../services/owner.service";
 
-const zipcodeRegExp = /^\d{5}(?:[-\s]\d{4})?$/;
-
-const schema = yup.object({
-    email: yup
-        .string()
-        .email("Invalid email address")
-        .required("Email is a required field"),
-    ownerName: yup.string().required("Owner Name is a required field"),
-    ownerPhone1: yup
-        .string()
-        .phone("Phone number is not valid")
-        .required("Phone is a required field"),
-    ownerPhone2: yup.string().phone("Phone number is not valid"),
-    ownerPhone3: yup.string().phone("Phone number is not valid"),
-    ownerPhone4: yup.string().phone("Phone number is not valid"),
-    ownerPhone5: yup.string().phone("Phone number is not valid"),
-    ownerPhone6: yup.string().phone("Phone number is not valid"),
-    ownerPhone7: yup.string().phone("Phone number is not valid"),
-    ownerAddress1: yup.string().required("Address is a required field"),
-    ownerCity: yup.string().required("City is a required field"),
-    ownerState: yup.string().required("State is a required field"),
-    ownerZip: yup
-        .string()
-        .matches(zipcodeRegExp, "Invalid Zip Code.")
-        .required("Zipcode is a required field"),
-});
-
-export default class UpdateOwner extends Component {
-    constructor(props) {
-        super(props);
-
-        this.onClickSubmit = this.onClickSubmit.bind(this);
-        this.onClickCancel = this.onClickCancel.bind(this);
-
-        this.state = {
-            values: {
-                email: "",
-                ownerName: "",
-                ownerPhone1: "",
-                ownerPhone2: "",
-                ownerPhone3: "",
-                ownerPhone4: "",
-                ownerPhone5: "",
-                ownerPhone6: "",
-                ownerPhone7: "",
-                ownerAddress1: "",
-                ownerAddress2: "",
-                ownerCity: "",
-                ownerState: "",
-                ownerZip: "",
-                ownerCountry: "US",
-                ownerSecContact: "",
-                ownerNote: "",
-            },
+export default function OwnerRegister() {
+    /*
+     * Private Page Token Verification Module.
+     */
+    const auth_obj = useSelector((state) => state.auth);
+    const { token, expiredAt } = auth_obj;
+    const dispatch = useDispatch();
+    useEffect(() => {
+        setAuthToken(token);
+        const verifyTokenTimer = setTimeout(() => {
+            dispatch(verifyTokenAsync(true));
+        }, moment(expiredAt).diff() - 10 * 1000);
+        return () => {
+            clearTimeout(verifyTokenTimer);
         };
-    }
+    }, [expiredAt, token, dispatch]);
+    /* ----------------------- */
 
-    componentDidMount() {
-        axios
-            .get(
-                window.$server_url +
-                    "/admin/owners/" +
-                    this.props.match.params.id
-            )
-            .then((res) => {
-                this.setState({
-                    values: res.data,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    const { id } = useParams();
+    const [owner, setOwner] = useState({
+        ownerName: "",
+        email: "",
+        ownerPhone1: "",
+        ownerPhone2: "",
+        ownerPhone3: "",
+        ownerPhone4: "",
+        ownerPhone5: "",
+        ownerPhone6: "",
+        ownerPhone7: "",
+        ownerAddress1: "",
+        ownerAddress2: "",
+        ownerCity: "",
+        ownerState: "",
+        ownerZip: "",
+        ownerCountry: "",
+        ownerSecContact: "",
+        ownerNote: "",
+    });
 
-    onClickSubmit(values) {
-        // Update Owner
-        axios
-            .patch(
-                window.$server_url +
-                    "/admin/owners/edit/" +
-                    this.state.values._id,
-                values
-            )
-            .then((res) => {
-                this.props.history.push("/admin/owners");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    const history = useHistory();
+    const [formError, setFormError] = useState("");
 
-    onClickCancel(e) {
+    const ownerName = useFormInput(owner.ownerName);
+    const email = useFormInput(owner.email);
+    const ownerPhone1 = useFormInput(owner.ownerPhone1);
+    const ownerPhone2 = useFormInput(owner.ownerPhone2);
+    const ownerPhone3 = useFormInput(owner.ownerPhone3);
+    const ownerPhone4 = useFormInput(owner.ownerPhone4);
+    const ownerPhone5 = useFormInput(owner.ownerPhone5);
+    const ownerPhone6 = useFormInput(owner.ownerPhone6);
+    const ownerPhone7 = useFormInput(owner.ownerPhone7);
+    const ownerAddress1 = useFormInput(owner.ownerAddress1);
+    const ownerAddress2 = useFormInput(owner.ownerAddress2);
+    const ownerCity = useFormInput(owner.ownerCity);
+    const ownerState = useFormInput(owner.ownerState);
+    const ownerZip = useFormInput(owner.ownerZip);
+    const ownerCountry = useFormInput(owner.ownerCountry);
+    const ownerSecContact = useFormInput(owner.ownerSecContact);
+    const ownerNote = useFormInput(owner.ownerNote);
+
+    useEffect(() => {
+        async function getData() {
+            const result = await ownerGetService(id);
+            if (result.error) {
+                dispatch(userLogoutAsync());
+            } else {
+                setOwner(result.data);
+            }
+        }
+        getData();
+    }, [dispatch, id, setOwner]);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        this.props.history.goBack();
-    }
 
-    listAllCountryOptions() {
+        async function fetchData() {
+            const owner = {
+                email: email.value,
+                ownerName: ownerName.value,
+                ownerPhone1: ownerPhone1.value,
+                ownerPhone2: ownerPhone2.value,
+                ownerPhone3: ownerPhone3.value,
+                ownerPhone4: ownerPhone4.value,
+                ownerPhone5: ownerPhone5.value,
+                ownerPhone6: ownerPhone6.value,
+                ownerPhone7: ownerPhone7.value,
+                ownerAddress1: ownerAddress1.value,
+                ownerAddress2: ownerAddress2.value,
+                ownerCity: ownerCity.value,
+                ownerState: ownerState.value,
+                ownerZip: ownerZip.value,
+                ownerCountry: ownerCountry.value,
+                ownerSecContact: ownerSecContact.value,
+                ownerNote: ownerNote.value,
+            };
+            const result = await ownerUpdateService(owner);
+            if (result.error) {
+                setFormError(result.errMsg);
+            } else {
+                history.push("/owners");
+            }
+        }
+        fetchData();
+    };
+
+    const handleCancel = (e) => {
+        e.preventDefault();
+        history.goBack();
+    };
+
+    const CountryOptions = (props) => (
+        <option value={props.sortname}>{props.name}</option>
+    );
+
+    const listCountries = () => {
         return csc.getAllCountries().map(function (country, index) {
             return (
                 <CountryOptions
@@ -116,527 +137,255 @@ export default class UpdateOwner extends Component {
                 ></CountryOptions>
             );
         });
-    }
+    };
 
-    render() {
-        return (
-            <Fragment>
-                <Container>
-                    <h1 className="m-5 text-center">Update Owner</h1>
-                </Container>
+    return (
+        <>
+            <Container>
+                <h1 className="m-5 text-center">Add A New Portal User</h1>
 
-                <Formik
-                    enableReinitialize={true}
-                    validationSchema={schema}
-                    initialValues={{
-                        email: this.state.values.email,
-                        ownerName: this.state.values.ownerName,
-                        ownerPhone1: this.state.values.ownerPhone1,
-                        ownerPhone2: this.state.values.ownerPhone2,
-                        ownerPhone3: this.state.values.ownerPhone3,
-                        ownerPhone4: this.state.values.ownerPhone4,
-                        ownerPhone5: this.state.values.ownerPhone5,
-                        ownerPhone6: this.state.values.ownerPhone6,
-                        ownerPhone7: this.state.values.ownerPhone7,
-                        ownerAddress1: this.state.values.ownerAddress1,
-                        ownerAddress2: this.state.values.ownerAddress2,
-                        ownerCity: this.state.values.ownerCity,
-                        ownerState: this.state.values.ownerState,
-                        ownerZip: this.state.values.ownerZip,
-                        ownerCountry: this.state.values.ownerCountry,
-                        ownerSecContact: this.state.values.ownerSecContact,
-                        ownerNote: this.state.values.ownerNote,
-                    }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        setTimeout(() => {
-                            this.onClickSubmit(values);
-                            setSubmitting(false);
-                        }, 400);
-                    }}
-                >
-                    {({
-                        values,
-                        handleSubmit,
-                        handleChange,
-                        handleBlur,
-                        touched,
-                        errors,
-                        isSubmitting,
-                    }) => (
-                        <Form
-                            noValidate
-                            onSubmit={handleSubmit}
-                            autoComplete="off"
-                        >
-                            <Container>
-                                <Row>
-                                    <Col>
-                                        <Card className="h-100 shadow">
-                                            <Card.Header className="bg-success text-white">
-                                                <h5 className="m-0">
-                                                    Owner Information
-                                                </h5>
-                                            </Card.Header>
-                                            <Card.Body>
-                                                <Form.Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>
-                                                            Email Address
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            type="email"
-                                                            name="email"
-                                                            placeholder="Owner's Email Address"
-                                                            value={values.email}
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.email &&
-                                                                !!errors.email
-                                                            }
-                                                            isValid={
-                                                                touched.email &&
-                                                                !errors.email
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.email}
-                                                        </Form.Control.Feedback>
-                                                        <Form.Text className="text-muted">
-                                                            We'll never share
-                                                            your email with
-                                                            anyone else.
-                                                        </Form.Text>
-                                                    </Form.Group>
+                <Form autoComplete="off">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <Card className="h-100 shadow">
+                                    <Card.Header className="bg-success text-white">
+                                        <h5 className="m-0">
+                                            Owner Information
+                                        </h5>
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Label>Email</Form.Label>
+                                                <Form.Control
+                                                    id="email"
+                                                    name="email"
+                                                    type="email"
+                                                    {...email}
+                                                    placeholder="Pet Owner's Email Address"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>
-                                                            Name
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerName"
-                                                            placeholder="Owner's Full Name"
-                                                            value={
-                                                                values.ownerName
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerName &&
-                                                                !!errors.ownerName
-                                                            }
-                                                            isValid={
-                                                                touched.ownerName &&
-                                                                !errors.ownerName
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerName}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
-                                                </Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Label>Name</Form.Label>
+                                                <Form.Control
+                                                    id="ownerName"
+                                                    name="ownerName"
+                                                    type="text"
+                                                    {...ownerName}
+                                                    placeholder="Pet Owner's Full Name"
+                                                />
+                                            </Form.Group>
+                                        </Form.Row>
 
-                                                <Form.Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>
-                                                            Phone
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            type="phone"
-                                                            name="ownerPhone1"
-                                                            placeholder="Owner's Primary Phone Number"
-                                                            value={
-                                                                values.ownerPhone1
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerPhone1 &&
-                                                                !!errors.ownerPhone1
-                                                            }
-                                                            isValid={
-                                                                touched.ownerPhone1 &&
-                                                                !errors.ownerPhone1
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerPhone1}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
+                                        <Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Label>
+                                                    Primary Phone
+                                                </Form.Label>
+                                                <Form.Control
+                                                    id="ownerPhone1"
+                                                    name="ownerPhone1"
+                                                    type="text"
+                                                    {...ownerPhone1}
+                                                    placeholder="Owner's Primary Phone Number"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>
-                                                            Secondary Phone
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            type="phone"
-                                                            name="ownerPhone2"
-                                                            placeholder="Owner's Secondary Phone Number"
-                                                            value={
-                                                                values.ownerPhone2
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerPhone2 &&
-                                                                !!errors.ownerPhone2
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerPhone2}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
-                                                </Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Label>
+                                                    Secondary Phone
+                                                </Form.Label>
+                                                <Form.Control
+                                                    id="ownerPhone2"
+                                                    name="ownerPhone2"
+                                                    type="text"
+                                                    {...ownerPhone2}
+                                                    placeholder="Owner's Secondary Phone Number"
+                                                />
+                                            </Form.Group>
+                                        </Form.Row>
 
-                                                <Form.Label>Address</Form.Label>
-                                                <Form.Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerAddress1"
-                                                            placeholder="1234 Main St"
-                                                            value={
-                                                                values.ownerAddress1
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerAddress1 &&
-                                                                !!errors.ownerAddress1
-                                                            }
-                                                            isValid={
-                                                                touched.ownerAddress1 &&
-                                                                !errors.ownerAddress1
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {
-                                                                errors.ownerAddress1
-                                                            }
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
+                                        <Form.Label>Address</Form.Label>
+                                        <Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerAddress1"
+                                                    name="ownerAddress1"
+                                                    type="text"
+                                                    {...ownerAddress1}
+                                                    placeholder="1234 Main St"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerAddress2"
-                                                            placeholder="Apartment, studio, or floor"
-                                                            value={
-                                                                values.ownerAddress2
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                        />
-                                                    </Form.Group>
-                                                </Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerAddress2"
+                                                    name="ownerAddress2"
+                                                    type="text"
+                                                    {...ownerAddress2}
+                                                    placeholder="Apartment, studio, or floor"
+                                                />
+                                            </Form.Group>
+                                        </Form.Row>
 
-                                                <Form.Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerCity"
-                                                            placeholder="City"
-                                                            value={
-                                                                values.ownerCity
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerCity &&
-                                                                !!errors.ownerCity
-                                                            }
-                                                            isValid={
-                                                                touched.ownerCity &&
-                                                                !errors.ownerCity
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerCity}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
+                                        <Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerCity"
+                                                    name="ownerCity"
+                                                    type="text"
+                                                    {...ownerCity}
+                                                    placeholder="City"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerState"
-                                                            placeholder="State"
-                                                            value={
-                                                                values.ownerState
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerState &&
-                                                                !!errors.ownerState
-                                                            }
-                                                            isValid={
-                                                                touched.ownerState &&
-                                                                !errors.ownerState
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerState}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerState"
+                                                    name="ownerState"
+                                                    type="text"
+                                                    {...ownerState}
+                                                    placeholder="State"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="ownerZip"
-                                                            placeholder="12345 (12345-6789)"
-                                                            value={
-                                                                values.ownerZip
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            onBlur={handleBlur}
-                                                            isInvalid={
-                                                                touched.ownerZip &&
-                                                                !!errors.ownerZip
-                                                            }
-                                                            isValid={
-                                                                touched.ownerZip &&
-                                                                !errors.ownerZip
-                                                            }
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            {errors.ownerZip}
-                                                        </Form.Control.Feedback>
-                                                    </Form.Group>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerZip"
+                                                    name="ownerZip"
+                                                    type="text"
+                                                    {...ownerZip}
+                                                    placeholder="12345 (12345-6789)"
+                                                />
+                                            </Form.Group>
 
-                                                    <Form.Group as={Col}>
-                                                        <Form.Control
-                                                            as="select"
-                                                            name="ownerCountry"
-                                                            value={
-                                                                values.ownerCountry
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                        >
-                                                            {this.listAllCountryOptions(
-                                                                values.ownerCountry
-                                                            )}
-                                                        </Form.Control>
-                                                    </Form.Group>
-                                                </Form.Row>
+                                            <Form.Group as={Col}>
+                                                <Form.Control
+                                                    id="ownerCountry"
+                                                    name="ownerCountry"
+                                                    as="select"
+                                                    {...ownerCountry}
+                                                >
+                                                    {listCountries(
+                                                        ownerCountry.value
+                                                    )}
+                                                </Form.Control>
+                                            </Form.Group>
+                                        </Form.Row>
 
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Group>
-                                                            <Form.Label>
-                                                                Secondary
-                                                                Contact
-                                                            </Form.Label>
-                                                            <Form.Control
-                                                                type="text"
-                                                                name="ownerSecContact"
-                                                                placeholder="Owner's Secondary Contact Information"
-                                                                value={
-                                                                    values.ownerSecContact
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                            />
-                                                        </Form.Group>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>
+                                                        Secondary Contact
+                                                    </Form.Label>
+                                                    <Form.Control
+                                                        id="ownerSecContact"
+                                                        name="ownerSecContact"
+                                                        type="text"
+                                                        {...ownerSecContact}
+                                                        placeholder="Owner's Secondary Contact Information"
+                                                    />
+                                                </Form.Group>
 
-                                                        <Form.Group>
-                                                            <Form.Label>
-                                                                Special Note
-                                                            </Form.Label>
-                                                            <Form.Control
-                                                                as="textarea"
-                                                                name="ownerNote"
-                                                                value={
-                                                                    values.ownerNote
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                            />
-                                                        </Form.Group>
-                                                    </Col>
+                                                <Form.Group>
+                                                    <Form.Label>
+                                                        Special Note
+                                                    </Form.Label>
+                                                    <Form.Control
+                                                        id="ownerNote"
+                                                        name="ownerNote"
+                                                        as="textarea"
+                                                        {...ownerNote}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
 
-                                                    <Col>
-                                                        <Form.Group>
-                                                            <Form.Label>
-                                                                Additional
-                                                                Phones
-                                                            </Form.Label>
-                                                            <Form.Control
-                                                                type="phone"
-                                                                name="ownerPhone3"
-                                                                value={
-                                                                    values.ownerPhone3
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                                onBlur={
-                                                                    handleBlur
-                                                                }
-                                                                isInvalid={
-                                                                    touched.ownerPhone3 &&
-                                                                    !!errors.ownerPhone3
-                                                                }
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    errors.ownerPhone3
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>
+                                                        Additional Phones
+                                                    </Form.Label>
+                                                    <Form.Control
+                                                        id="ownerPhone3"
+                                                        name="ownerPhone3"
+                                                        type="text"
+                                                        {...ownerPhone3}
+                                                    />
+                                                </Form.Group>
 
-                                                        <Form.Group>
-                                                            <Form.Control
-                                                                type="phone"
-                                                                name="ownerPhone4"
-                                                                value={
-                                                                    values.ownerPhone4
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                                onBlur={
-                                                                    handleBlur
-                                                                }
-                                                                isInvalid={
-                                                                    touched.ownerPhone4 &&
-                                                                    !!errors.ownerPhone4
-                                                                }
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    errors.ownerPhone4
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
+                                                <Form.Group>
+                                                    <Form.Control
+                                                        id="ownerPhone4"
+                                                        name="ownerPhone4"
+                                                        type="text"
+                                                        {...ownerPhone4}
+                                                    />
+                                                </Form.Group>
 
-                                                        <Form.Group>
-                                                            <Form.Control
-                                                                type="phone"
-                                                                name="ownerPhone5"
-                                                                value={
-                                                                    values.ownerPhone5
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                                onBlur={
-                                                                    handleBlur
-                                                                }
-                                                                isInvalid={
-                                                                    touched.ownerPhone5 &&
-                                                                    !!errors.ownerPhone5
-                                                                }
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    errors.ownerPhone5
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
+                                                <Form.Group>
+                                                    <Form.Control
+                                                        id="ownerPhone5"
+                                                        name="ownerPhone5"
+                                                        type="text"
+                                                        {...ownerPhone5}
+                                                    />
+                                                </Form.Group>
 
-                                                        <Form.Group>
-                                                            <Form.Control
-                                                                type="phone"
-                                                                name="ownerPhone6"
-                                                                value={
-                                                                    values.ownerPhone6
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                                onBlur={
-                                                                    handleBlur
-                                                                }
-                                                                isInvalid={
-                                                                    touched.ownerPhone6 &&
-                                                                    !!errors.ownerPhone6
-                                                                }
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    errors.ownerPhone6
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
+                                                <Form.Group>
+                                                    <Form.Control
+                                                        id="ownerPhone6"
+                                                        name="ownerPhone6"
+                                                        type="text"
+                                                        {...ownerPhone6}
+                                                    />
+                                                </Form.Group>
 
-                                                        <Form.Group>
-                                                            <Form.Control
-                                                                type="phone"
-                                                                name="ownerPhone7"
-                                                                value={
-                                                                    values.ownerPhone7
-                                                                }
-                                                                onChange={
-                                                                    handleChange
-                                                                }
-                                                                onBlur={
-                                                                    handleBlur
-                                                                }
-                                                                isInvalid={
-                                                                    touched.ownerPhone7 &&
-                                                                    !!errors.ownerPhone7
-                                                                }
-                                                            />
-                                                            <Form.Control.Feedback type="invalid">
-                                                                {
-                                                                    errors.ownerPhone7
-                                                                }
-                                                            </Form.Control.Feedback>
-                                                        </Form.Group>
-                                                    </Col>
-                                                </Form.Row>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                                <Form.Group>
+                                                    <Form.Control
+                                                        id="ownerPhone7"
+                                                        name="ownerPhone7"
+                                                        type="text"
+                                                        {...ownerPhone7}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                        </Form.Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
 
-                                <Row className="mt-5">
-                                    <Col>
-                                        <Button
-                                            className="float-right"
-                                            variant="outline-secondary"
-                                            onClick={this.onClickCancel}
-                                        >
-                                            Cancel
-                                        </Button>
+                        <Row>
+                            <Col>
+                                <Button
+                                    className="float-right mt-5"
+                                    variant="outline-secondary"
+                                    onClick={handleCancel}
+                                >
+                                    Cancel
+                                </Button>
 
-                                        <Button
-                                            className="float-right mr-2"
-                                            variant="primary"
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                        >
-                                            Update Owner
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Form>
-                    )}
-                </Formik>
-            </Fragment>
-        );
-    }
+                                <Button
+                                    className="float-right mr-2 mt-5"
+                                    variant="primary"
+                                    onClick={handleSubmit}
+                                >
+                                    Add User
+                                </Button>
+
+                                {formError && (
+                                    <Form.Text className="text-danger float-right mr-4">
+                                        {formError}
+                                    </Form.Text>
+                                )}
+                            </Col>
+                        </Row>
+                    </Container>
+                </Form>
+            </Container>
+        </>
+    );
 }

@@ -58,7 +58,6 @@ export default function UserEdit() {
             if (result.error) {
                 dispatch(userLogoutAsync());
             } else {
-                console.log(result.data);
                 setUser(result.data);
             }
         }
