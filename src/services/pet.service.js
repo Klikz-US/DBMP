@@ -13,17 +13,6 @@ export const petGetListService = async (activePage) => {
     }
 };
 
-export const petGetCountService = async () => {
-    try {
-        return await axios.get(`${window.$server_url}/admin/pets/count`);
-    } catch (err) {
-        return {
-            error: true,
-            errMsg: err.message,
-        };
-    }
-};
-
 export const petGetService = async (_id) => {
     try {
         return await axios.get(`${window.$server_url}/admin/pets/${_id}`);

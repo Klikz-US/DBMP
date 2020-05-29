@@ -11,7 +11,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 import {
     ownerGetListService,
-    ownerGetCountService,
     ownerDeleteService,
 } from "./../services/owner.service";
 import { verifyTokenAsync } from "../actions/auth-async.action";
@@ -113,13 +112,10 @@ export default function OwnerList() {
                         if (hasResult) {
                             handleSearch();
                         } else {
-                            setOwners(ownerList.data);
+                            setOwners(ownerList.data.owners);
+                            setTotalPages(parseInt(ownerList.data.count / 20));
                         }
                     }
-
-                    const ownerCount = await ownerGetCountService();
-                    if (!ownerCount.error)
-                        setTotalPages(parseInt(ownerCount.data / 20));
                 }
                 fetchOwnerData();
             }

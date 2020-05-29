@@ -107,7 +107,6 @@ export default function PetRegister() {
     useEffect(() => {
         async function getData() {
             const petData = await petGetService(id);
-            console.log(petData);
             if (petData.error) {
                 dispatch(userLogoutAsync());
             } else {
@@ -208,15 +207,14 @@ export default function PetRegister() {
     const photoUpdate = (e) => {
         e.preventDefault();
 
-        if (e.target.files[0]) {
-            setpetPhoto(e.target.files[0]);
+        const photo = e.target.files[0];
+        if (photo) {
+            setpetPhoto(photo);
             setPetPhotoPath(
                 "/uploads/photo/" +
                     pet.microchip +
                     "." +
-                    petPhoto.name.split(".")[
-                        petPhoto.name.split(".").length - 1
-                    ]
+                    photo.name.split(".")[photo.name.split(".").length - 1]
             );
             setPetPhotoPreview(URL.createObjectURL(e.target.files[0]));
         }

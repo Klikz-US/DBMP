@@ -11,11 +11,7 @@ import { FcCancel } from "react-icons/fc";
 import { MdErrorOutline } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import {
-    petGetListService,
-    petGetCountService,
-    petDeleteService,
-} from "./../services/pet.service";
+import { petGetListService, petDeleteService } from "./../services/pet.service";
 import { verifyTokenAsync } from "../actions/auth-async.action";
 import { setAuthToken } from "../services/auth.service";
 import { petSearchService } from "../services/search.service";
@@ -57,7 +53,6 @@ export default function PetList() {
         async function fetchData() {
             const petList = await petGetListService(activePage);
             if (!petList.error) {
-                console.log(petList.data);
                 setPets(petList.data.pets);
                 setTotalPages(parseInt(petList.data.count / 20));
             }
@@ -117,13 +112,10 @@ export default function PetList() {
                         if (hasResult) {
                             handleSearch();
                         } else {
-                            setPets(petList.data);
+                            setPets(petList.data.pets);
+                            setTotalPages(parseInt(petList.data.count / 20));
                         }
                     }
-
-                    const petCount = await petGetCountService();
-                    if (!petCount.error)
-                        setTotalPages(parseInt(petCount.data / 20));
                 }
                 fetchPetData();
             }

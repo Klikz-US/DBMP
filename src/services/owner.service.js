@@ -13,17 +13,6 @@ export const ownerGetListService = async (activePage) => {
     }
 };
 
-export const ownerGetCountService = async () => {
-    try {
-        return await axios.get(`${window.$server_url}/admin/owners/count`);
-    } catch (err) {
-        return {
-            error: true,
-            errMsg: err.message,
-        };
-    }
-};
-
 export const ownerGetService = async (_id) => {
     try {
         return await axios.get(`${window.$server_url}/admin/owners/${_id}`);

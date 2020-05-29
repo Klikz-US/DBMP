@@ -18,7 +18,7 @@ exports.routesConfig = function (app) {
         Authentication.authMiddleware,
         Controller.deleteById,
     ]);
-    app.post("/admin/pets/register", [
+    app.post("/admin/pets/add", [
         Authentication.authMiddleware,
         Controller.register,
     ]);
