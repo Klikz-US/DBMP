@@ -1,4 +1,5 @@
 const Model = require("./model");
+const PetModel = require("../pets/model");
 
 exports.count = (req, res) => {
     Model.find().countDocuments(function (err, count) {
@@ -51,17 +52,25 @@ exports.editById = (req, res) => {
     const _id = req.params._id;
     const data = req.body;
 
-    Model.findOneAndUpdate({ _id: _id }, data, function (err, owner) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            if (!owner) {
-                res.status(404).send("No Owner found");
+    async function process() {
+        try {
+            const owner = await Model.findByIdAndUpdate(_id, data);
+            if (owner) {
+                const pet = await PetModel.findOneAndUpdate(
+                    { email: owner.email },
+                    {
+                        ownerName: data.ownerName,
+                    }
+                );
+                res.json({ ...owner, ...pet });
             } else {
-                res.json(owner);
+                res.status(404).send("Owner not found");
             }
+        } catch (error) {
+            res.status(500).send(error);
         }
-    });
+    }
+    process();
 };
 
 exports.deleteById = (req, res) => {

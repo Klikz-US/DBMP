@@ -57,11 +57,11 @@ export default function PetList() {
         async function fetchData() {
             const petList = await petGetListService(activePage);
             if (!petList.error) {
-                setPets(petList.data);
+                console.log(petList.data);
+                setPets(petList.data.pets);
+                setTotalPages(parseInt(petList.data.count / 20));
             }
 
-            const petCount = await petGetCountService();
-            if (!petCount.error) setTotalPages(parseInt(petCount.data / 20));
             setPageLoading(false);
         }
         if (!hasResult) {

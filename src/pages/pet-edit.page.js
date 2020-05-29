@@ -187,6 +187,8 @@ export default function PetRegister() {
                     } else {
                         history.goBack();
                     }
+                } else {
+                    history.goBack();
                 }
             }
         }
@@ -196,6 +198,11 @@ export default function PetRegister() {
     const handleCancel = (e) => {
         e.preventDefault();
         history.goBack();
+    };
+
+    const photoErrorHandle = (e) => {
+        e.preventDefault();
+        e.target.src = nophoto;
     };
 
     const photoUpdate = (e) => {
@@ -234,7 +241,7 @@ export default function PetRegister() {
     return (
         <>
             <Container>
-                <h1 className="m-5 text-center">Update Owner Information</h1>
+                <h1 className="m-5 text-center">Update Pet Information</h1>
 
                 <Form autoComplete="off">
                     <Container>
@@ -440,6 +447,7 @@ export default function PetRegister() {
                                             width="100%"
                                             height="auto"
                                             thumbnail
+                                            onError={photoErrorHandle}
                                         />
                                     </Card.Body>
                                 </Card>
@@ -661,7 +669,7 @@ export default function PetRegister() {
                                     variant="primary"
                                     onClick={handleSubmit}
                                 >
-                                    Update Owner
+                                    Update Pet
                                 </Button>
 
                                 {formError && (

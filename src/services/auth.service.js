@@ -1,10 +1,5 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-axios.defaults.headers["Accept"] =
-    "application/json, multipart/form-data, text/plain";
-axios.defaults.headers["Content-Type"] =
-    "application/json, multipart/form-data, text/plain";
-delete axios.defaults.headers["Accept-Encoding"];
 
 // set token to the axios
 export const setAuthToken = (token) => {

@@ -14,25 +14,34 @@ exports.count = (req, res) => {
 exports.getByPage = (req, res) => {
     const pageId = req.params.pageId;
 
-    Model.paginate(
-        {},
-        {
-            select:
-                "microchip petName email ownerId ownerName membership photoPath registered_at",
-            page: pageId,
-            limit: 20,
-            sort: {
-                _id: -1,
-            },
-        },
-        function (err, pets) {
-            if (err) {
-                res.status(500).send(err);
+    async function process() {
+        try {
+            const count = await Model.find().countDocuments();
+            const pets = await Model.paginate(
+                {},
+                {
+                    select:
+                        "microchip petName email ownerId ownerName membership photoPath registered_at",
+                    page: pageId,
+                    limit: 20,
+                    sort: {
+                        _id: -1,
+                    },
+                }
+            );
+            if (pets) {
+                res.json({
+                    pets: pets.docs,
+                    count: count,
+                });
             } else {
-                res.json(pets.docs);
+                res.status(404).send("Pets not found");
             }
+        } catch (error) {
+            res.status(500).send(error);
         }
-    );
+    }
+    process();
 };
 
 exports.getById = (req, res) => {
@@ -45,8 +54,6 @@ exports.getById = (req, res) => {
                 return res.status(404).send("No Pet found");
             }
             const owner = await OwnerModel.findById(pet.ownerId);
-            console.log(pet);
-            console.log(owner);
             res.json({ ...pet._doc, ...owner._doc });
         } catch (error) {
             res.status(500).send(error);
@@ -59,23 +66,33 @@ exports.editById = (req, res) => {
     const _id = req.params._id;
     const data = req.body;
 
-    Model.findOneAndUpdate({ _id: _id }, data, function (err, pet) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            if (!pet) {
-                res.status(404).send("No Pet found");
+    async function process() {
+        try {
+            const pet = await Model.findByIdAndUpdate(_id, data);
+            if (pet) {
+                const owner = await OwnerModel.findByIdAndUpdate(
+                    pet.ownerId,
+                    data
+                );
+                if (owner) {
+                    res.json({ ...pet, ...owner });
+                } else {
+                    res.status(404).send("Owner not found");
+                }
             } else {
-                res.json(pet);
+                res.status(404).send("Pet not found");
             }
+        } catch (error) {
+            res.status(500).send(error);
         }
-    });
+    }
+    process();
 };
 
 exports.deleteById = (req, res) => {
     const _id = req.params._id;
 
-    Model.findOneAndDelete({ _id: _id }, function (err, pet) {
+    Model.findByIdAndDelete(_id, function (err, pet) {
         if (err) {
             res.status(500).send(err);
         } else {

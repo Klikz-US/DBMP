@@ -122,6 +122,7 @@ export default class RegisterPet extends Component {
                 }
             })
             .catch((err) => {
+                console.log(err.response);
                 this.setState({
                     error: err.response.data,
                 });
