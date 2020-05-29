@@ -113,7 +113,6 @@ export default function PetRegister() {
             } else {
                 setPet((pet) => ({ ...pet, ...petData.data }));
             }
-            console.log(pet);
 
             if (pet.microchip !== "") {
                 const photoData = await photoGetService(pet.microchip);
