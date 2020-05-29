@@ -1,16 +1,6 @@
 const Model = require("./model");
 const OwnerModel = require("../owners/model");
 
-exports.count = (req, res) => {
-    Model.find().countDocuments(function (err, count) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(count);
-        }
-    });
-};
-
 exports.getByPage = (req, res) => {
     const pageId = req.params.pageId;
 

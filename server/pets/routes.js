@@ -2,10 +2,6 @@ const Controller = require("./controller");
 const Authentication = require("../services/auth");
 
 exports.routesConfig = function (app) {
-    app.get("/admin/pets/count", [
-        Authentication.authMiddleware,
-        Controller.count,
-    ]);
     app.get("/admin/pets/page/:pageId", [
         Authentication.authMiddleware,
         Controller.getByPage,

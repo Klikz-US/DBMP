@@ -1,36 +1,37 @@
 const Model = require("./model");
 const PetModel = require("../pets/model");
 
-exports.count = (req, res) => {
-    Model.find().countDocuments(function (err, count) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(count);
-        }
-    });
-};
-
 exports.getByPage = (req, res) => {
     const pageId = req.params.pageId;
 
-    Model.paginate(
-        {},
-        {
-            page: pageId,
-            limit: 20,
-            sort: {
-                _id: -1,
-            },
-        },
-        function (err, owners) {
-            if (err) {
-                res.status(500).send(err);
+    async function process() {
+        try {
+            const count = await Model.find().countDocuments();
+            const owners = await Model.paginate(
+                {},
+                {
+                    select:
+                        "ownerName email ownerPhone1 ownerCity ownerState registered_at",
+                    page: pageId,
+                    limit: 20,
+                    sort: {
+                        _id: -1,
+                    },
+                }
+            );
+            if (owners) {
+                res.json({
+                    owners: owners.docs,
+                    count: count,
+                });
             } else {
-                res.json(owners.docs);
+                res.status(404).send("Owners not found");
             }
+        } catch (error) {
+            res.status(500).send(error);
         }
-    );
+    }
+    process();
 };
 
 exports.getById = (req, res) => {

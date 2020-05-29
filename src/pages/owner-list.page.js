@@ -54,12 +54,10 @@ export default function OwnerList() {
         async function fetchData() {
             const ownerList = await ownerGetListService(activePage);
             if (!ownerList.error) {
-                setOwners(ownerList.data);
+                setOwners(ownerList.data.owners);
+                setTotalPages(parseInt(ownerList.data.count / 20));
             }
 
-            const ownerCount = await ownerGetCountService();
-            if (!ownerCount.error)
-                setTotalPages(parseInt(ownerCount.data / 20));
             setPageLoading(false);
         }
         if (!hasResult) {
