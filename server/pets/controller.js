@@ -37,17 +37,22 @@ exports.getByPage = (req, res) => {
 
 exports.getById = (req, res) => {
     const _id = req.params._id;
-    Model.findOne({ _id: _id }, function (err, pet) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
+
+    async function process() {
+        try {
+            const pet = await Model.findById(_id);
             if (!pet) {
-                res.status(404).send("No Pet found");
-            } else {
-                res.json(pet);
+                return res.status(404).send("No Pet found");
             }
+            const owner = await OwnerModel.findById(pet.ownerId);
+            console.log(pet);
+            console.log(owner);
+            res.json({ ...pet._doc, ...owner._doc });
+        } catch (error) {
+            res.status(500).send(error);
         }
-    });
+    }
+    process();
 };
 
 exports.editById = (req, res) => {

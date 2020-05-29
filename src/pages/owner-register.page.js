@@ -45,7 +45,7 @@ export default function OwnerRegister() {
     const city = useFormInput("");
     const state = useFormInput("");
     const zip = useFormInput("");
-    const country = useFormInput("");
+    const country = useFormInput("US");
     const seccon = useFormInput("");
     const spenote = useFormInput("");
 
@@ -106,7 +106,7 @@ export default function OwnerRegister() {
     return (
         <>
             <Container>
-                <h1 className="m-5 text-center">Add A New Portal User</h1>
+                <h1 className="m-5 text-center">Register A New Pet Owner</h1>
 
                 <Form autoComplete="off">
                     <Container>
@@ -337,7 +337,7 @@ export default function OwnerRegister() {
                                     variant="primary"
                                     onClick={handleSubmit}
                                 >
-                                    Add User
+                                    Register Owner
                                 </Button>
 
                                 {formError && (

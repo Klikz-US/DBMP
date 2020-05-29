@@ -47,7 +47,7 @@ export default function OwnerRegister() {
         ownerCity: "",
         ownerState: "",
         ownerZip: "",
-        ownerCountry: "",
+        ownerCountry: "US",
         ownerSecContact: "",
         ownerNote: "",
     });
@@ -108,7 +108,7 @@ export default function OwnerRegister() {
                 ownerSecContact: ownerSecContact.value,
                 ownerNote: ownerNote.value,
             };
-            const result = await ownerUpdateService(owner);
+            const result = await ownerUpdateService(id, owner);
             if (result.error) {
                 setFormError(result.errMsg);
             } else {
@@ -142,7 +142,7 @@ export default function OwnerRegister() {
     return (
         <>
             <Container>
-                <h1 className="m-5 text-center">Add A New Portal User</h1>
+                <h1 className="m-5 text-center">Update Owner Information</h1>
 
                 <Form autoComplete="off">
                     <Container>
@@ -373,7 +373,7 @@ export default function OwnerRegister() {
                                     variant="primary"
                                     onClick={handleSubmit}
                                 >
-                                    Add User
+                                    Update Owner
                                 </Button>
 
                                 {formError && (
