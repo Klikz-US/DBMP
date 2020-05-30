@@ -9,6 +9,7 @@ let PetModel = new Schema(
             type: String,
             required: true,
             trim: true,
+            index: true,
         },
         petName: {
             type: String,

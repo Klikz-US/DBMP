@@ -9,6 +9,7 @@ let OwnerModel = new Schema(
             type: String,
             required: true,
             trim: true,
+            index: true,
         },
         ownerName: {
             type: String,
