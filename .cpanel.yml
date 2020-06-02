@@ -1,15 +1,15 @@
 ---
 deployment:
     tasks:
-        - export OLDSERVERPATH=/home/klikz/public_html/klikz.us/server/
-        - export SERVERPATH=/home/klikz/public_html/klikz.us/
-        - export BUILDSTATIC=/home/klikz/public_html/klikz.us/static
-        - export BUILDFILES1=/home/klikz/public_html/klikz.us/*.json
-        - export BUILDFILES2=/home/klikz/public_html/klikz.us/*.js
-        - export BUILDFILES3=/home/klikz/public_html/klikz.us/*.png
-        - export BUILDFILES4=/home/klikz/public_html/klikz.us/*.html
-        - export BUILDFILES5=/home/klikz/public_html/klikz.us/*.ico
-        - export BUILDFILES6=/home/klikz/public_html/klikz.us/*.txt
+        - export OLDSERVERPATH=/home/klikz/public_html/admin.klikz.us/server/
+        - export SERVERPATH=/home/klikz/public_html/admin.klikz.us/
+        - export BUILDSTATIC=/home/klikz/public_html/admin.klikz.us/static
+        - export BUILDFILES1=/home/klikz/public_html/admin.klikz.us/*.json
+        - export BUILDFILES2=/home/klikz/public_html/admin.klikz.us/*.js
+        - export BUILDFILES3=/home/klikz/public_html/admin.klikz.us/*.png
+        - export BUILDFILES4=/home/klikz/public_html/admin.klikz.us/*.html
+        - export BUILDFILES5=/home/klikz/public_html/admin.klikz.us/*.ico
+        - export BUILDFILES6=/home/klikz/public_html/admin.klikz.us/*.txt
         - sudo /bin/rm -R $BUILDSTATIC
         - sudo /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
         - sudo /bin/rm -R $OLDSERVERPATH
