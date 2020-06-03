@@ -45,9 +45,11 @@ const credentials = {
         fs.readFileSync("./ssl/alphasslrootcabundle.crt"),
     ],
 };
+
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
-
+httpServer.keepAliveTimeout = 61 * 1000;
+httpsServer.keepAliveTimeout = 61 * 1000;
 httpServer.listen(http_port, () => {
     console.log("HTTP Server running on port " + http_port);
 });
