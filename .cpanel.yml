@@ -10,11 +10,11 @@ deployment:
         - export BUILDFILES4=/home/klikz/public_html/admin.klikz.us/*.html
         - export BUILDFILES5=/home/klikz/public_html/admin.klikz.us/*.ico
         - export BUILDFILES6=/home/klikz/public_html/admin.klikz.us/*.txt
-        - sudo /bin/rm -R $BUILDSTATIC
-        - sudo /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
-        - sudo /bin/rm -R $OLDSERVERPATH
-        - sudo /bin/cp -R server $SERVERPATH
-        - sudo /bin/cp -R build/* $SERVERPATH
-        - sudo /bin/cp package-lock.json $SERVERPATH
-        - sudo /bin/cp package.json $SERVERPATH
-        - sudo /bin/cp .htaccess $SERVERPATH
+        - su /bin/rm -R $BUILDSTATIC
+        - su /bin/rm $BUILDFILES1 $BUILDFILES2 $BUILDFILES3 $BUILDFILES4 $BUILDFILES5 $BUILDFILES6
+        - su /bin/rm -R $OLDSERVERPATH
+        - su /bin/cp -R server $SERVERPATH
+        - su /bin/cp -R build/* $SERVERPATH
+        - su /bin/cp package-lock.json $SERVERPATH
+        - su /bin/cp package.json $SERVERPATH
+        - su /bin/cp .htaccess $SERVERPATH
